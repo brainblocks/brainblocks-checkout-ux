@@ -1,0 +1,6 @@
+package-lock.json
+flow-typed
+node_modules
+.next
+coverage
+npm-debug.log

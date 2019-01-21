@@ -1,0 +1,42 @@
+{
+  "name": "brainblocks-checkout",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --ext .js --ext .jsx .",
+    "flow-typed": "rm -rf ./flow-typed && flow-typed install && flow-typed install jest@23",
+    "flow": "flow",
+    "test": "npm run lint && npm run flow-typed && npm run flow",
+    "reinstall": "rimraf flow-typed && rimraf node_modules && npm install && flow-typed install",
+    "debug": "cross-env NODE_ENV=debug",
+    "jest": "jest --collectCoverage"
+  },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "belter": "^1.0.82",
+    "next": "^7.0.2",
+    "react": "^16.8.0-alpha.1",
+    "react-dom": "^16.8.0-alpha.1",
+    "zalgo-promise": "^1.0.36"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.91.0",
+    "grumbler-scripts": "^3.0.25",
+    "react-testing-library": "^5.4.4"
+  }
+}

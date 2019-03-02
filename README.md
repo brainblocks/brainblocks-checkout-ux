@@ -6,6 +6,7 @@ React / Next.js modules for:
 - Rendering the BrainBlocks Button
 - Rendering the BrainBlocks Checkout flow
 
+
 Quick Start
 -----------
 

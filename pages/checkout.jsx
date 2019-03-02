@@ -1,6 +1,7 @@
 /* @flow */
 
 import React from 'react';
+import Head from 'next/head';
 
 import { useBrainBlocksScript } from '../hooks';
 
@@ -16,6 +17,12 @@ const Checkout = () => {
 
     return (
         <div>
+            <Head>
+                <script>
+                    window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+                </script>
+            </Head>
+            
             { brainblocksScript }
 
             <style jsx>{`

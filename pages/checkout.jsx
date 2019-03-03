@@ -4,6 +4,8 @@ import React from 'react';
 import Head from 'next/head';
 
 import { useBrainBlocksScript } from '../hooks';
+import { StatusBanner } from '../components/statusBanner';
+import { PAYMENT_STATUS } from '../config/constants';
 
 const Checkout = () => {
     const { brainblocksScript } = useBrainBlocksScript();
@@ -36,24 +38,27 @@ const Checkout = () => {
 
             { brainblocksScript }
 
-            <style jsx>{`
-                section {
-                    text-align: center;
-                }
+            <StatusBanner status={ PAYMENT_STATUS.PENDING } />
 
-                button {
-                    background: #eee;
-                    border: none;
-                    border-radius: 5px;
-                    display: inline-block;
-                    width: 250px;
-                    font-size: 20px;
-                    cursor: pointer;
-                    font-family: helvetica, sans-serif;
-                    margin-top: 200px;
-                    height: 40px;
-                }
-            `}
+            <style jsx>
+                {`
+                    section {
+                        text-align: center;
+                    }
+
+                    button {
+                        background: #eee;
+                        border: none;
+                        border-radius: 5px;
+                        display: inline-block;
+                        width: 250px;
+                        font-size: 20px;
+                        cursor: pointer;
+                        font-family: helvetica, sans-serif;
+                        margin-top: 200px;
+                        height: 40px;
+                    }
+                `}
             </style>
 
             <section>

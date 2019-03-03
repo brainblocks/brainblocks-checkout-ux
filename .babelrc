@@ -1,6 +1,7 @@
 {
     "presets": [ "next/babel" ],
     "plugins": [
-        "transform-flow-strip-types"
+        "transform-flow-strip-types",
+        "inline-react-svg"
     ]
 }

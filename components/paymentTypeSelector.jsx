@@ -15,16 +15,19 @@ export const PaymentTypeSelector = () => {
               .selector-button-container {
                 background-color: #fff;
                 border-radius: 50px;
-                height: 50px;
+                height: 55px;
                 width: 320px;
+                display: inline-block;
+                box-shadow: 3px 3px 18px #eee;
               }
 
               ul {
+                margin: 0;
                 list-style: none;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
-                padding: 7px;
+                padding: 10px;
               }
 
               button {

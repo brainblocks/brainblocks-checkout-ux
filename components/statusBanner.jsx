@@ -38,7 +38,6 @@ export function StatusBanner({ status } : StateBannerProps) : Element<*> {
                         font-weight: bold;
                         letter-spacing: 1px;
                     }
-
                 `}
             </style>
 

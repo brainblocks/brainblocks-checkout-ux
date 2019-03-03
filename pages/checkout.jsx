@@ -7,6 +7,7 @@ import { useBrainBlocksScript } from '../hooks';
 import { StatusBanner } from '../components/statusBanner';
 import { PAYMENT_STATUS } from '../config/constants';
 import { PaymentTypeSelector } from '../components/paymentTypeSelector';
+import { AccountLoginForm } from '../components/accountLoginForm';
 
 const Checkout = () => {
     const { brainblocksScript } = useBrainBlocksScript();
@@ -31,11 +32,13 @@ const Checkout = () => {
                 {`
                     * {
                         font-family: Montserrat,sans-serif;
+                        box-sizing: border-box;
                     }
-                    
+
                     html, body {
                         margin: 0;
                         padding: 0;
+                        text-align: center;
                     }
                 `}
             </style>
@@ -49,24 +52,12 @@ const Checkout = () => {
                     section {
                         text-align: center;
                     }
-
-                    button {
-                        background: #eee;
-                        border: none;
-                        border-radius: 5px;
-                        display: inline-block;
-                        width: 250px;
-                        font-size: 20px;
-                        cursor: pointer;
-                        margin-top: 200px;
-                        height: 40px;
-                    }
                 `}
             </style>
 
             <section>
                 <PaymentTypeSelector />
-                <button type='button' data-testid='pay-button' onClick={ onComplete }>Complete Checkout</button>
+                <AccountLoginForm />
             </section>
         </div>
     );

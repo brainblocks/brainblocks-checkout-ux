@@ -11,8 +11,7 @@ export const PaymentTypeSelector = () => {
 
     return (
         <section className="selector-button-container">
-            <style jsx>{
-                `
+            <style jsx>{`
               .selector-button-container {
                 background-color: #fff;
                 border-radius: 50px;
@@ -49,8 +48,7 @@ export const PaymentTypeSelector = () => {
                 background-color: #fff;
                 color: #939393;
               }
-            `
-            }
+            `}
             </style>
             <ul>
                 <li><button className={ `${ (tab === 'wallet') ? 'active' : 'inactive' }` } onClick={ () => onSelect('wallet') } type="button" >Wallet</button></li>

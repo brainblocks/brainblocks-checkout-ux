@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 
 import { useBrainBlocksScript } from '../hooks';
@@ -9,6 +9,13 @@ import { PAYMENT_STATUS } from '../config/constants';
 import { PaymentTypeSelector } from '../components/paymentTypeSelector';
 import { AccountLoginForm } from '../components/accountLoginForm';
 import { TransactionDetails } from '../components/transactionsDetails';
+import { QRCodeScan } from '../components/qrCodeScan';
+
+const PAGE = {
+    WALLET: 'wallet',
+    SCAN:   'scan',
+    COPY:   'copy'
+};
 
 const Checkout = () => {
     const { brainblocksScript } = useBrainBlocksScript();
@@ -23,6 +30,45 @@ const Checkout = () => {
     };
 
     */
+
+    const pages = [
+        {
+            name:  PAGE.WALLET,
+            label: 'Wallet'
+        },
+        {
+            name:  PAGE.SCAN,
+            label: 'Scan'
+        },
+        {
+            name:  PAGE.COPY,
+            label: 'Copy'
+        }
+    ];
+
+    const [ selectedPage, setSelectedPage ] = useState(PAGE.WALLET);
+
+    const [ payeeName, setPayeeName ] = useState();
+    const [ payeeLogo, setPayeeLogo ] = useState();
+    const [ cryptoAmount, setCryptoAmount ] = useState();
+    const [ fiatAmount, setFiatAmount ] = useState();
+    const [ fiatCurrencyCode, setFiatCurrencyCode ] = useState();
+    const cryptoCurrencyCode = 'nano';
+    const cryptoDestination = 'nano_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji';
+
+    useEffect(() => {
+        if (Math.random() < 0.5) {
+            setPayeeName('Apple Store');
+            setPayeeLogo('https://i.imgur.com/JkArT9C.png');
+        } else {
+            setPayeeName('Amazon');
+            setPayeeLogo('https://i.imgur.com/AW14Qak.png');
+        }
+
+        setFiatAmount(`${ Math.floor(Math.random() * 100) }.${ Math.floor(Math.random() * 100) }`);
+        setCryptoAmount(`${ Math.floor(Math.random() * 100) }.${ Math.floor(Math.random() * 1000) }`);
+        setFiatCurrencyCode((Math.random() < 0.5) ? 'usd' : 'eur');
+    }, []);
 
     return (
         <div>
@@ -40,6 +86,24 @@ const Checkout = () => {
                     * {
                         font-family: Montserrat,sans-serif;
                         box-sizing: border-box;
+                        user-select: none;
+                    }
+
+                    html, body {
+                        margin: 0;
+                        padding: 0;
+                        text-align: center;
+                    }
+                `}
+            </style>
+
+
+            <style jsxs>
+                {`
+                    * {
+                        font-family: Montserrat,sans-serif;
+                        box-sizing: border-box;
+                        user-select: none;
                     }
 
                     svg {
@@ -69,6 +133,7 @@ const Checkout = () => {
 
                     .bottom-section {
                         backround-color: #ddd;
+                        padding-bottom: 20px;
                     }
                 `}
             </style>
@@ -79,21 +144,31 @@ const Checkout = () => {
 
             <section className='top-section'>
                 <TransactionDetails
-                    payeeName={ 'Apple Store' }
-                    payeeLogo={ 'https://i.imgur.com/JkArT9C.png' }
-                    cryptoAmount={ '20.543' }
-                    cryptoCurrencyCode={ 'nano' }
-                    fiatAmount={ '24.90' }
-                    fiatCurrencyCode={ 'usd' }
+                    payeeName={ payeeName }
+                    payeeLogo={ payeeLogo }
+                    cryptoAmount={ cryptoAmount }
+                    cryptoCurrencyCode={ cryptoCurrencyCode }
+                    fiatAmount={ fiatAmount }
+                    fiatCurrencyCode={ fiatCurrencyCode }
                 />
             </section>
 
             <section className='middle-section'>
-                <PaymentTypeSelector />
+                <PaymentTypeSelector pages={ pages } onSelect={ setSelectedPage } />
             </section>
 
             <section className='bottom-section'>
-                <AccountLoginForm />
+                {
+                    (selectedPage === PAGE.WALLET) &&
+                        <AccountLoginForm />
+                }
+                {
+                    (selectedPage === PAGE.SCAN) &&
+                        <QRCodeScan
+                            cryptoCurrencyCode={ cryptoCurrencyCode }
+                            cryptoAmount={ cryptoAmount }
+                            cryptoDestination={ cryptoDestination } />
+                }
             </section>
 
             <style jsx>

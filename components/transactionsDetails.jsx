@@ -52,7 +52,8 @@ export function TransactionDetails({ payeeName, payeeLogo, cryptoAmount, cryptoC
 
                     .transaction-details .payee-logo img {
                         height: 50px;
-                        max-width: 100px;
+                        max-width: 200px;
+                        border-radius: 5px;
                     }
 
                     .transaction-details .payee .payee-name {
@@ -97,7 +98,7 @@ export function TransactionDetails({ payeeName, payeeLogo, cryptoAmount, cryptoC
                 </div>
 
                 <div className='payee'>
-                Pay <span className='payee-name'>{ payeeName }</span>
+                    Pay <span className='payee-name'>{ payeeName }</span>
                 </div>
 
                 <div className='crypto-amount'>

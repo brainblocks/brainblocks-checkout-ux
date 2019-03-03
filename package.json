@@ -30,7 +30,8 @@
   "dependencies": {
     "belter": "^1.0.82",
     "next": "^7.0.2",
-    "react": "^16.8.0-alpha.1",
+    "qrcode.react": "^0.9.3",
+    "react": "^16.8.0",
     "react-dom": "^16.8.0-alpha.1",
     "zalgo-promise": "^1.0.36"
   },

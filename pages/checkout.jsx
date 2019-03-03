@@ -42,6 +42,10 @@ const Checkout = () => {
                         box-sizing: border-box;
                     }
 
+                    svg {
+                        height: 100%;
+                    }
+
                     html, body {
                         margin: 0;
                         padding: 0;

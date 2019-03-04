@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 import { noop } from '../lib/util';
 
+import { Spinner } from './spinner';
+
 type SubmitButtonProps = {|
     onSubmit : () => void | Promise<void>,
     text : string
@@ -23,9 +25,9 @@ export function SubmitButton({ onSubmit, text } : SubmitButtonProps) : Element<*
             <style jsx>{`
                 button {
                     position: relative;
-                    height: 40px;
                     width: 100%;
                     background-color: #5AB666;
+                    padding: 10px 0;
                     color: white;
                     font-weight: bold;
                     font-size: 14px;
@@ -35,31 +37,22 @@ export function SubmitButton({ onSubmit, text } : SubmitButtonProps) : Element<*
                     border: none;
                 }
 
-                .spinner {
+                button .button-spinner {
                     position: absolute;
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
                     height: 25px;
                     width: 25px;
-                    box-sizing: border-box;
-                    border: 3px solid rgba(0, 0, 0, .2);
-                    border-top-color: rgba(255, 255, 255, 0.8);
-                    border-radius: 100%;
-                    animation: rotation .7s infinite linear;
-              }
-              @keyframes rotation {
-                    from {
-                        transform: translateX(-50%) translateY(-50%) rotate(0deg);
-                    }
-                    to {
-                        transform: translateX(-50%) translateY(-50%) rotate(359deg);
-                    }
-              }
+                }
+
+                button .button-text {
+                    visibility: ${ loading ? 'hidden' : 'visible' }
+                }
             `}
             </style>
-            {loading && <div className="spinner" />}
-            {!loading && text}
+            {loading && <div className="button-spinner"><Spinner /></div>}
+            <span className="button-text">{ text }</span>
         </button>
     );
 }

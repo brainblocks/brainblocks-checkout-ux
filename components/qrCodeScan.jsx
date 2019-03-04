@@ -1,9 +1,17 @@
 /* @flow */
 
-import React from 'react';
+import React, { type Element } from 'react';
 import QRCode from 'qrcode.react';
 
-export const QRCodeScan = ({ cryptoAmount, cryptoCurrencyCode, cryptoDestination }) => {
+import { CRYPTO_CURRENCY } from '../config/constants';
+
+type QRCodeScanProps = {|
+    cryptoAmount : string,
+    cryptoCurrencyCode : $Values<typeof CRYPTO_CURRENCY>,
+    cryptoDestination : string
+|};
+
+export function QRCodeScan({ cryptoAmount, cryptoCurrencyCode, cryptoDestination } : QRCodeScanProps) : Element<*> {
 
     return (
         <div>
@@ -29,4 +37,4 @@ export const QRCodeScan = ({ cryptoAmount, cryptoCurrencyCode, cryptoDestination
             <p><QRCode value={ cryptoDestination } size={ 180 } /></p>
         </div>
     );
-};
+}

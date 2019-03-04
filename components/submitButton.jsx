@@ -1,11 +1,16 @@
 /* @flow */
 
-import React, { useState } from 'react';
+import React, { useState, type Element } from 'react';
 import PropTypes from 'prop-types';
 
 import { noop } from '../lib/util';
 
-export const SubmitButton = ({ onSubmit, text }) => {
+type SubmitButtonProps = {|
+    onSubmit : () => void | Promise<void>,
+    text : string
+|};
+
+export function SubmitButton({ onSubmit, text } : SubmitButtonProps) : Element<*> {
     const [ loading, setLoading ] = useState(false);
 
     const onClick = () => {
@@ -14,7 +19,7 @@ export const SubmitButton = ({ onSubmit, text }) => {
     };
 
     return (
-        <button onClick={ onClick }>
+        <button type='button' onClick={ onClick }>
             <style jsx>{`
                 button {
                     position: relative;
@@ -57,7 +62,7 @@ export const SubmitButton = ({ onSubmit, text }) => {
             {!loading && text}
         </button>
     );
-};
+}
 
 SubmitButton.displayName = 'Submit Button';
 

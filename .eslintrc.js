@@ -7,7 +7,8 @@ module.exports = {
         'import/no-default-export': 'off',
         'react/prop-types': 'off',
         'promise/no-native': 'off',
-        'no-restricted-globals': 'off'
+        'no-restricted-globals': 'off',
+        'compat/compat': 'off'
     },
 
     'globals': {

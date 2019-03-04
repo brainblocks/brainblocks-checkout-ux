@@ -1,7 +1,6 @@
 /* @flow */
 
-import React, { useState } from 'react';
-
+import React, { useState, type Element } from 'react';
 
 import FacebookLogo from '../img/fb-logo.svg';
 import GoogleLogo from '../img/google-logo.svg';
@@ -10,14 +9,13 @@ import ArrowIcon from '../img/arrow-icon.svg';
 import { SubmitButton } from './submitButton';
 
 
-export const AccountLoginForm = () => {
+export function AccountLoginForm() : Element<*> {
     const [ userName, setUser ] = useState(undefined);
     const [ password, setPassword ] = useState(undefined);
 
     const onSubmit = () => {
         return new Promise((resolve) => {
             setTimeout(() => {
-                console.log('success! :)');
                 resolve();
             }, 2000);
         });
@@ -192,11 +190,11 @@ export const AccountLoginForm = () => {
                 <div className="submit-button">
                     <SubmitButton onSubmit={ onSubmit } text="Sign In" />
                     <div className="alt-logins">
-                        <button className="alt-login-button facebook">
+                        <button type='button' className="alt-login-button facebook">
                             <div className="logo-container"><FacebookLogo /></div>
                             <p className="alt-login-button-label">Facebook</p>
                         </button>
-                        <button className="alt-login-button google">
+                        <button type='button' className="alt-login-button google">
                             <div className="logo-container"><GoogleLogo /></div>
                             <p className="alt-login-button-label">Google</p>
                         </button>
@@ -209,6 +207,6 @@ export const AccountLoginForm = () => {
             </div>
         </div>
     );
-};
+}
 
 AccountLoginForm.displayName = 'Account Login Form';

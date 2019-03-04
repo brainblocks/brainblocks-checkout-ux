@@ -48,11 +48,11 @@ const Checkout = () => {
 
     const [ selectedPage, setSelectedPage ] = useState(PAGE.WALLET);
 
-    const [ payeeName, setPayeeName ] = useState();
-    const [ payeeLogo, setPayeeLogo ] = useState();
-    const [ cryptoAmount, setCryptoAmount ] = useState();
-    const [ fiatAmount, setFiatAmount ] = useState();
-    const [ fiatCurrencyCode, setFiatCurrencyCode ] = useState();
+    const [ payeeName, setPayeeName ] = useState('');
+    const [ payeeLogo, setPayeeLogo ] = useState('');
+    const [ cryptoAmount, setCryptoAmount ] = useState('');
+    const [ fiatAmount, setFiatAmount ] = useState('');
+    const [ fiatCurrencyCode, setFiatCurrencyCode ] = useState('');
     const cryptoCurrencyCode = 'nano';
     const cryptoDestination = 'nano_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji';
 

@@ -1,8 +1,16 @@
 /* @flow */
 
-import React, { useState } from 'react';
+import React, { useState, type Element } from 'react';
 
-export const PaymentTypeSelector = ({ pages, onSelect }) => {
+type PaymentTypeSelectorProps = {|
+    pages : $ReadOnlyArray<{|
+        name : string,
+        label : string
+    |}>,
+    onSelect : (string) => void
+|};
+
+export function PaymentTypeSelector({ pages, onSelect } : PaymentTypeSelectorProps) : Element<*> {
     const [ tab, setTab ] = useState('wallet');
 
     const onClick = (tabType) => {
@@ -73,6 +81,6 @@ export const PaymentTypeSelector = ({ pages, onSelect }) => {
             </ul>
         </section>
     );
-};
+}
 
 PaymentTypeSelector.displayName = 'Payment Type Selector';

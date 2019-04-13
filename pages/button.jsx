@@ -1,14 +1,12 @@
 /* @flow */
 
 import React, { useState } from 'react';
-import Head from 'next/head';
 
-import { useBrainBlocksScript } from '../hooks';
 import BrainBlocksLogo from '../img/brainblocks_logo.svg';
 import { Spinner } from '../components/spinner';
+import { Head } from '../components/head';
 
 const Button = () => {
-    const { brainblocks, brainblocksScript } = useBrainBlocksScript();
     const [ loading, setLoading ] = useState(false);
 
     const onClick = () => {
@@ -29,14 +27,7 @@ const Button = () => {
 
     return (
         <div>
-            <Head>
-                <link href="https://fonts.googleapis.com/css?family=Maven+Pro:700,900|Montserrat:400,600|Source+Code+Pro:600" rel="stylesheet" />
-                <script>
-                    window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-                </script>
-            </Head>
-
-            { brainblocksScript }
+            <Head />
 
             <style jsx global>{`
                 * {

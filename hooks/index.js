@@ -1,3 +1,3 @@
 /* @flow */
 
-export * from './script';
+export * from './payment';

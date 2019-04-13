@@ -1,15 +1,18 @@
 /* @flow */
 
 import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
 
-import { useBrainBlocksScript } from '../hooks';
+import { usePaymentSession } from '../hooks';
 import { StatusBanner } from '../components/statusBanner';
 import { PAYMENT_STATUS } from '../config/constants';
 import { PaymentTypeSelector } from '../components/paymentTypeSelector';
 import { AccountLoginForm } from '../components/accountLoginForm';
 import { TransactionDetails } from '../components/transactionsDetails';
 import { QRCodeScan } from '../components/qrCodeScan';
+import { CopyAddress } from '../components/copyAddress';
+import { Head } from '../components/head';
+import { getLocalStorage, setLocalStorage, isBrowser } from '../lib/util';
+import { SuccessMessage } from '../components/successMessage';
 
 const PAGE = {
     WALLET: 'wallet',
@@ -17,69 +20,61 @@ const PAGE = {
     COPY:   'copy'
 };
 
-const Checkout = () => {
-    const { brainblocksScript } = useBrainBlocksScript();
+const PAGES = [
+    {
+        name:  PAGE.WALLET,
+        label: 'Wallet'
+    },
+    {
+        name:  PAGE.SCAN,
+        label: 'Scan'
+    },
+    {
+        name:  PAGE.COPY,
+        label: 'Copy'
+    }
+];
 
-    /*
 
-    const onComplete = () => {
-        window.xprops.onComplete({
-            token: 'xyz123'
-        });
-        window.xprops.close();
+const usePage = (defaultPage) => {
+    const [ page, setPage ] = useState(() => {
+        return getLocalStorage('brainblocks_payment_selected_page') || defaultPage;
+    });
+
+    const setSelectedPage = (page) => {
+        setLocalStorage('brainblocks_payment_selected_page', page);
+        setPage(page);
     };
 
-    */
+    return [ page, setSelectedPage ];
+};
 
-    const pages = [
-        {
-            name:  PAGE.WALLET,
-            label: 'Wallet'
-        },
-        {
-            name:  PAGE.SCAN,
-            label: 'Scan'
-        },
-        {
-            name:  PAGE.COPY,
-            label: 'Copy'
-        }
-    ];
 
-    const [ selectedPage, setSelectedPage ] = useState(PAGE.WALLET);
+const Checkout = () => {
+    if (!isBrowser()) {
+        return <Head />;
+    }
 
-    const [ payeeName, setPayeeName ] = useState('');
-    const [ payeeLogo, setPayeeLogo ] = useState('');
-    const [ cryptoAmount, setCryptoAmount ] = useState('');
-    const [ fiatAmount, setFiatAmount ] = useState('');
-    const [ fiatCurrencyCode, setFiatCurrencyCode ] = useState('');
-    const cryptoCurrencyCode = 'nano';
-    const cryptoDestination = 'nano_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji';
+    const { payeeName, payeeLogo, cryptoAmount, cryptoCurrencyCode, fiatAmount, fiatCurrencyCode, cryptoAccount, received } = usePaymentSession();
+    const [ selectedPage, setSelectedPage ] = usePage(PAGE.WALLET);
 
     useEffect(() => {
-        if (Math.random() < 0.5) {
-            setPayeeName('Apple Store');
-            setPayeeLogo('https://i.imgur.com/JkArT9C.png');
-        } else {
-            setPayeeName('Amazon');
-            setPayeeLogo('https://i.imgur.com/AW14Qak.png');
-        }
+        if (received) {
+            const timeout = setTimeout(() => {
+                window.xprops.onComplete({
+                    
+                });
+            }, 3000);
 
-        setFiatAmount(`${ Math.floor(Math.random() * 100) }.${ Math.floor(Math.random() * 100) }`);
-        setCryptoAmount(`${ Math.floor(Math.random() * 100) }.${ Math.floor(Math.random() * 1000) }`);
-        setFiatCurrencyCode((Math.random() < 0.5) ? 'usd' : 'eur');
-    }, []);
+            return () => {
+                clearTimeout(timeout);
+            };
+        }
+    }, [ received ]);
 
     return (
         <div>
-            <Head>
-                <link href="https://fonts.googleapis.com/css?family=Maven+Pro:700,900|Montserrat:400,600|Source+Code+Pro:600" rel="stylesheet" />
-                <script>
-                    window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-                </script>
-            </Head>
-
-            { brainblocksScript }
+            <Head />
 
             <style jsx global>
                 {`
@@ -93,32 +88,24 @@ const Checkout = () => {
                         margin: 0;
                         padding: 0;
                         text-align: center;
+                        background-color: #f7f7f7;
                     }
                 `}
             </style>
 
-
-            <style jsxs>
+            <style jsx>
                 {`
-                    * {
-                        font-family: Montserrat,sans-serif;
-                        box-sizing: border-box;
-                        user-select: none;
-                    }
-
                     svg {
                         height: 100%;
                     }
-
-                    html, body {
-                        margin: 0;
-                        padding: 0;
+                    
+                    section {
                         text-align: center;
                     }
 
                     .top-section {
                         width: 100%;
-                        background-color: #f7f7f7;
+                        background-color: #eee;
                         padding: 40px;
                         padding-bottom: 70px;
                     }
@@ -128,56 +115,66 @@ const Checkout = () => {
                         top: -28px;
                         text-align: center;
                         margin-bottom: -10px;
-                        backround-color: #ddd;
                     }
 
                     .bottom-section {
-                        backround-color: #ddd;
-                        padding-bottom: 20px;
+                        background-color: #f7f7f7;
+                        padding: 0 40px 30px;
                     }
                 `}
             </style>
 
             <StatusBanner
-                status={ PAYMENT_STATUS.PENDING }
+                status={ received ? PAYMENT_STATUS.RECEIVED : PAYMENT_STATUS.PENDING }
             />
 
-            <section className='top-section'>
-                <TransactionDetails
-                    payeeName={ payeeName }
-                    payeeLogo={ payeeLogo }
-                    cryptoAmount={ cryptoAmount }
-                    cryptoCurrencyCode={ cryptoCurrencyCode }
-                    fiatAmount={ fiatAmount }
-                    fiatCurrencyCode={ fiatCurrencyCode }
-                />
-            </section>
+            {
+                received
+                    ? <SuccessMessage
+                        payeeName={ payeeName }
+                        cryptoAmount={ cryptoAmount }
+                        cryptoCurrencyCode={ cryptoCurrencyCode }
+                        fiatAmount={ fiatAmount }
+                        fiatCurrencyCode={ fiatCurrencyCode }
+                    />
+                    : <>
+                        <section className='top-section'>
+                            <TransactionDetails
+                                payeeName={ payeeName }
+                                payeeLogo={ payeeLogo }
+                                cryptoAmount={ cryptoAmount }
+                                cryptoCurrencyCode={ cryptoCurrencyCode }
+                                fiatAmount={ fiatAmount }
+                                fiatCurrencyCode={ fiatCurrencyCode }
+                            />
+                        </section>
 
-            <section className='middle-section'>
-                <PaymentTypeSelector pages={ pages } onSelect={ setSelectedPage } />
-            </section>
+                        <section className='middle-section'>
+                            <PaymentTypeSelector pages={ PAGES } selected={ selectedPage } onSelect={ setSelectedPage } />
+                        </section>
 
-            <section className='bottom-section'>
-                {
-                    (selectedPage === PAGE.WALLET) &&
-                        <AccountLoginForm />
-                }
-                {
-                    (selectedPage === PAGE.SCAN) &&
-                        <QRCodeScan
-                            cryptoCurrencyCode={ cryptoCurrencyCode }
-                            cryptoAmount={ cryptoAmount }
-                            cryptoDestination={ cryptoDestination } />
-                }
-            </section>
-
-            <style jsx>
-                {`
-                    section {
-                        text-align: center;
-                    }
-                `}
-            </style>
+                        <section className='bottom-section'>
+                            {
+                                (selectedPage === PAGE.WALLET) &&
+                                <AccountLoginForm />
+                            }
+                            {
+                                (selectedPage === PAGE.SCAN) &&
+                                <QRCodeScan
+                                    cryptoCurrencyCode={ cryptoCurrencyCode }
+                                    cryptoAmount={ cryptoAmount }
+                                    cryptoDestination={ cryptoAccount } />
+                            }
+                            {
+                                (selectedPage === PAGE.COPY) &&
+                                <CopyAddress
+                                    cryptoCurrencyCode={ cryptoCurrencyCode }
+                                    cryptoAmount={ cryptoAmount }
+                                    cryptoDestination={ cryptoAccount } />
+                            }
+                        </section>
+                    </>
+            }
         </div>
     );
 };

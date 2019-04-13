@@ -12,6 +12,9 @@ type QRCodeScanProps = {|
 |};
 
 export function QRCodeScan({ cryptoAmount, cryptoCurrencyCode, cryptoDestination } : QRCodeScanProps) : Element<*> {
+    if (!cryptoDestination) {
+        return null;
+    }
 
     return (
         <div>
@@ -30,11 +33,17 @@ export function QRCodeScan({ cryptoAmount, cryptoCurrencyCode, cryptoDestination
                     color: #939393;
                     margin: 0;
                 }
+
+                .qr-code {
+                    margin: 0;
+                    padding: 0;
+                    margin-top: 30px;
+                }
             `}
             </style>
             <p className="pay-faster">Scan and Pay</p>
             <p className="login-text">Send { cryptoAmount } { cryptoCurrencyCode }</p>
-            <p><QRCode value={ cryptoDestination } size={ 180 } /></p>
+            <p className="qr-code"><QRCode value={ cryptoDestination } size={ 180 } /></p>
         </div>
     );
 }

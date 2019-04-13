@@ -29,6 +29,8 @@
   "license": "ISC",
   "dependencies": {
     "belter": "^1.0.82",
+    "clipboard": "^2.0.4",
+    "copy-to-clipboard": "^3.0.8",
     "next": "^7.0.2",
     "qrcode.react": "^0.9.3",
     "react": "^16.8.0",

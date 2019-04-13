@@ -30,7 +30,7 @@ export function TransactionDetails({ payeeName, payeeLogo, cryptoAmount, cryptoC
                         box-shadow: 3px 3px 18px #eee;
                         background-color: white;
                         position: relative;
-                        padding-top: 30px;
+                        padding-top: ${ payeeLogo ? '30px' : '15px' };
                         padding-bottom: 15px;
                         text-align: center;
                     }
@@ -106,9 +106,12 @@ export function TransactionDetails({ payeeName, payeeLogo, cryptoAmount, cryptoC
                     <span className='amount'>{ cryptoAmount }</span>
                 </div>
 
-                <div className='fiat-amount'>
-                    <span className='symbol'>{ FIAT_CURRENCY_SYMBOL[fiatCurrencyCode] }</span><span className='amount'>{ fiatAmount }</span>
-                </div>
+                { fiatAmount && (
+                    <div className='fiat-amount'>
+                        <span className='symbol'>{ FIAT_CURRENCY_SYMBOL[fiatCurrencyCode] }</span><span className='amount'>{ fiatAmount }</span>
+                    </div>
+                ) }
+
             </div>
         </section>
     );

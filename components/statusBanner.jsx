@@ -14,31 +14,52 @@ const SETTINGS = {
     }
 };
 
-type StateBannerProps = {|
+type StatusBannerProps = {|
     status : $Values<typeof PAYMENT_STATUS>,
+    time? : number,
     onTimeout? : () => void
 |};
 
-export function StatusBanner({ status, onTimeout = noop } : StateBannerProps) : Element<*> {
+export function StatusBanner({ status, timeout = 10 * 60, onTimeout = noop } : StatusBannerProps) : Element<*> {
     const { text } = SETTINGS[status];
 
-    const totalTime = 5 * 60;
-    const [ percentageComplete, setPercentageComplete ] = useState(50);
+    const [ elapsed, setElapsed ] = useState(0);
+    let [ percentageComplete, setPercentageComplete ] = useState(0);
 
     useEffect(() => {
         const startTime = Date.now();
 
         const interval = setInterval(() => {
             const elapsedTime = (Date.now() - startTime) / 1000;
-            const percComplete = Math.min((elapsedTime / totalTime) * 100, 100);
+            const percComplete = Math.min((elapsedTime / timeout) * 100, 100);
+
+            setElapsed(parseInt(elapsedTime));
             setPercentageComplete(percComplete);
 
             if (percentageComplete >= 100) {
                 clearInterval(interval);
                 onTimeout();
             }
-        }, 50);
+        }, 1000);
     }, []);
+
+    let statusMessage;
+
+    if (status === PAYMENT_STATUS.RECEIVED) {
+        statusMessage = text;
+        percentageComplete = 100;
+
+    } else {
+        const remaining = timeout - elapsed;
+        const minutes = Math.floor(remaining / 60);
+        const seconds = remaining % 60;
+    
+        const remainingFormatted = minutes
+            ? `${ minutes }:${ seconds < 10 ? '0' : '' }${ seconds }`
+            : `${ seconds } seconds`;
+            
+        statusMessage = `${ text } (${ remainingFormatted })`;
+    }
 
     return (
         <section>
@@ -81,13 +102,13 @@ export function StatusBanner({ status, onTimeout = noop } : StateBannerProps) : 
                         position: absolute;
                         top: 0;
                         left: 0;
-                        background-color: #999;
+                        background-color: #cecece;
                         z-index: 80;
                     }
                 `}
             </style>
 
-            <div className='status-loader-text'>{ text }</div>
+            <div className='status-loader-text'>{ statusMessage }</div>
             <div className='status-loader-background' />
             <div className='status-loader-foreground' />
             

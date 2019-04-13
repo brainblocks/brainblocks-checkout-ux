@@ -7,11 +7,12 @@ type PaymentTypeSelectorProps = {|
         name : string,
         label : string
     |}>,
+    selected : string,
     onSelect : (string) => void
 |};
 
-export function PaymentTypeSelector({ pages, onSelect } : PaymentTypeSelectorProps) : Element<*> {
-    const [ tab, setTab ] = useState('wallet');
+export function PaymentTypeSelector({ pages, selected, onSelect } : PaymentTypeSelectorProps) : Element<*> {
+    const [ tab, setTab ] = useState(selected);
 
     const onClick = (tabType) => {
         setTab(tabType);

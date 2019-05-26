@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { useState, useEffect, type Element } from 'react';
+import React, { type Element } from 'react';
 
 import { CopyField } from './copyField';
 
@@ -9,7 +9,6 @@ type CopyAddressProps = {|
     cryptoCurrencyCode : string,
     cryptoDestination : string
 |};
-
 
 export function CopyAddress({ cryptoDestination, cryptoCurrencyCode, cryptoAmount } : CopyAddressProps) : Element<*> {
 

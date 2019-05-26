@@ -11,7 +11,7 @@ type QRCodeScanProps = {|
     cryptoDestination : string
 |};
 
-export function QRCodeScan({ cryptoAmount, cryptoCurrencyCode, cryptoDestination } : QRCodeScanProps) : Element<*> {
+export function QRCodeScan({ cryptoAmount, cryptoCurrencyCode, cryptoDestination } : QRCodeScanProps) : null | Element<*> {
     if (!cryptoDestination) {
         return null;
     }

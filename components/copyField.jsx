@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { useState, useEffect, type Element } from 'react';
+import React, { useState, type Element } from 'react';
 import copy from 'copy-to-clipboard';
 
 type CopyFieldProps = {|

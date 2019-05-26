@@ -16,7 +16,7 @@ const SETTINGS = {
 
 type StatusBannerProps = {|
     status : $Values<typeof PAYMENT_STATUS>,
-    time? : number,
+    timeout? : number,
     onTimeout? : () => void
 |};
 
@@ -33,7 +33,7 @@ export function StatusBanner({ status, timeout = 10 * 60, onTimeout = noop } : S
             const elapsedTime = (Date.now() - startTime) / 1000;
             const percComplete = Math.min((elapsedTime / timeout) * 100, 100);
 
-            setElapsed(parseInt(elapsedTime));
+            setElapsed(parseInt(elapsedTime, 10));
             setPercentageComplete(percComplete);
 
             if (percentageComplete >= 100) {

@@ -41,9 +41,9 @@ const usePage = (defaultPage) => {
         return getLocalStorage('brainblocks_payment_selected_page') || defaultPage;
     });
 
-    const setSelectedPage = (page) => {
-        setLocalStorage('brainblocks_payment_selected_page', page);
-        setPage(page);
+    const setSelectedPage = (selectedPage) => {
+        setLocalStorage('brainblocks_payment_selected_page', selectedPage);
+        setPage(selectedPage);
     };
 
     return [ page, setSelectedPage ];
@@ -55,7 +55,9 @@ const Checkout = () => {
         return <Head />;
     }
 
-    const { payeeName, payeeLogo, cryptoAmount, cryptoCurrencyCode, fiatAmount, fiatCurrencyCode, cryptoAccount, received } = usePaymentSession();
+    const paymentSession = usePaymentSession();
+    const { payeeName, payeeLogo, cryptoAmount, cryptoCurrencyCode, fiatAmount, fiatCurrencyCode, cryptoAccount, received } = paymentSession || {};
+
     const [ selectedPage, setSelectedPage ] = usePage(PAGE.WALLET);
 
     useEffect(() => {
@@ -71,6 +73,10 @@ const Checkout = () => {
             };
         }
     }, [ received ]);
+
+    if (!paymentSession) {
+        return <Head />;
+    }
 
     return (
         <div>
@@ -130,50 +136,55 @@ const Checkout = () => {
 
             {
                 received
-                    ? <SuccessMessage
-                        payeeName={ payeeName }
-                        cryptoAmount={ cryptoAmount }
-                        cryptoCurrencyCode={ cryptoCurrencyCode }
-                        fiatAmount={ fiatAmount }
-                        fiatCurrencyCode={ fiatCurrencyCode }
-                    />
-                    : <>
-                        <section className='top-section'>
-                            <TransactionDetails
-                                payeeName={ payeeName }
-                                payeeLogo={ payeeLogo }
-                                cryptoAmount={ cryptoAmount }
-                                cryptoCurrencyCode={ cryptoCurrencyCode }
-                                fiatAmount={ fiatAmount }
-                                fiatCurrencyCode={ fiatCurrencyCode }
-                            />
-                        </section>
+                    ? (
+                        <SuccessMessage
+                            payeeName={ payeeName }
+                            cryptoAmount={ cryptoAmount }
+                            cryptoCurrencyCode={ cryptoCurrencyCode }
+                            fiatAmount={ fiatAmount }
+                            fiatCurrencyCode={ fiatCurrencyCode }
+                        />
+                    )
 
-                        <section className='middle-section'>
-                            <PaymentTypeSelector pages={ PAGES } selected={ selectedPage } onSelect={ setSelectedPage } />
-                        </section>
+                    : (
+                        <>
+                            <section className='top-section'>
+                                <TransactionDetails
+                                    payeeName={ payeeName }
+                                    payeeLogo={ payeeLogo }
+                                    cryptoAmount={ cryptoAmount }
+                                    cryptoCurrencyCode={ cryptoCurrencyCode }
+                                    fiatAmount={ fiatAmount }
+                                    fiatCurrencyCode={ fiatCurrencyCode }
+                                />
+                            </section>
 
-                        <section className='bottom-section'>
-                            {
-                                (selectedPage === PAGE.WALLET) &&
-                                <AccountLoginForm />
-                            }
-                            {
-                                (selectedPage === PAGE.SCAN) &&
-                                <QRCodeScan
-                                    cryptoCurrencyCode={ cryptoCurrencyCode }
-                                    cryptoAmount={ cryptoAmount }
-                                    cryptoDestination={ cryptoAccount } />
-                            }
-                            {
-                                (selectedPage === PAGE.COPY) &&
-                                <CopyAddress
-                                    cryptoCurrencyCode={ cryptoCurrencyCode }
-                                    cryptoAmount={ cryptoAmount }
-                                    cryptoDestination={ cryptoAccount } />
-                            }
-                        </section>
-                    </>
+                            <section className='middle-section'>
+                                <PaymentTypeSelector pages={ PAGES } selected={ selectedPage } onSelect={ setSelectedPage } />
+                            </section>
+
+                            <section className='bottom-section'>
+                                {
+                                    (selectedPage === PAGE.WALLET) &&
+                                    <AccountLoginForm />
+                                }
+                                {
+                                    (selectedPage === PAGE.SCAN) &&
+                                    <QRCodeScan
+                                        cryptoCurrencyCode={ cryptoCurrencyCode }
+                                        cryptoAmount={ cryptoAmount }
+                                        cryptoDestination={ cryptoAccount } />
+                                }
+                                {
+                                    (selectedPage === PAGE.COPY) &&
+                                    <CopyAddress
+                                        cryptoCurrencyCode={ cryptoCurrencyCode }
+                                        cryptoAmount={ cryptoAmount }
+                                        cryptoDestination={ cryptoAccount } />
+                                }
+                            </section>
+                        </>
+                    )
             }
         </div>
     );

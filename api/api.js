@@ -2,10 +2,15 @@
 
 import { objToQuery } from '../lib/util';
 
-export function callAPI(method, url, data) {
+const STATUS = {
+    SUCCESS: 'success',
+    EXPIRED: 'expired'
+};
+
+export function callAPI<T>(method : string, url : string, data : ?Object) : Promise<T> {
     data = data || {};
 
-    const req = {
+    const req : RequestOptions = { // eslint-disable-line no-undef
         method,
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
         timeout: 100000
@@ -17,13 +22,14 @@ export function callAPI(method, url, data) {
 
     return fetch(url, req)
         .then((res) => {
-            return res.json().then((data) => {
-                if (data.status !== 'success' && data.status !== 'expired') {
-                    const err = new Error(`Api ${  url  } status: ${  data.status }`);
+            return res.json().then(json => {
+                if (json.status !== STATUS.SUCCESS && json.status !== STATUS.EXPIRED) {
+                    const err = new Error(`Api ${  url  } status: ${  json.status }`);
+                    // $FlowFixMe
                     err.res = res;
                     throw err;
                 }
-                return data;
+                return json;
             });
         });
 }

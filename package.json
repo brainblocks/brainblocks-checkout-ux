@@ -29,6 +29,7 @@
   "license": "ISC",
   "dependencies": {
     "belter": "^1.0.82",
+    "brainblocks-components": "git+https://gitlab+deploy-token-1:inPbzBjEPLPpaBwhd_Pw@git.brainblocks.io/brainblocks/brainblocks-react-components.git#master",
     "clipboard": "^2.0.4",
     "copy-to-clipboard": "^3.0.8",
     "next": "^7.0.2",

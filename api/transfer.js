@@ -1,15 +1,18 @@
 /* @flow */
 
 import { delay } from '../lib/util';
+import { CRYPTO_CURRENCY, FIAT_CURRENCY } from '../config/constants';
 
 import { SESSION_API_URL } from './config';
 import { callAPI } from './api';
 
-const STATUS = {
-    SUCCESS: 'success'
-};
+type Session = {|
+    token : string,
+    account : string,
+    amount_rai : number
+|};
 
-export function setupSession({ destination, amount, currency }) : Promise<mixed> {
+export function setupSession({ destination, amount, currency } : { destination : string, amount : string, currency : $Values<typeof CRYPTO_CURRENCY | typeof FIAT_CURRENCY> }) : Promise<Session> {
     amount = '1000';
     currency = 'rai';
     return callAPI('post', SESSION_API_URL, {
@@ -19,7 +22,7 @@ export function setupSession({ destination, amount, currency }) : Promise<mixed>
     });
 }
 
-export function awaitFunds({ token, time, failures = 0 }) : Promise<mixed> {
+export function awaitFunds({ token, time, failures = 0 } : { token : string, time : number, failures? : number }) : Promise<void> {
     const start = Date.now();
 
     return callAPI('post', `${ SESSION_API_URL }/${ token }/transfer`, {

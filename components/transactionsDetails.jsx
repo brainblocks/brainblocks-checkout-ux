@@ -10,8 +10,8 @@ type TransactionDetailsProps = {|
     payeeLogo : ?string,
     cryptoAmount : string,
     cryptoCurrencyCode : $Values<typeof CRYPTO_CURRENCY>,
-    fiatAmount : string,
-    fiatCurrencyCode : $Values<typeof FIAT_CURRENCY>
+    fiatAmount : ?string,
+    fiatCurrencyCode : ?$Values<typeof FIAT_CURRENCY>
 |};
 
 const CRYPTO_LOGOS = {
@@ -106,7 +106,7 @@ export function TransactionDetails({ payeeName, payeeLogo, cryptoAmount, cryptoC
                     <span className='amount'>{ cryptoAmount }</span>
                 </div>
 
-                { fiatAmount && (
+                { (fiatAmount && fiatCurrencyCode) && (
                     <div className='fiat-amount'>
                         <span className='symbol'>{ FIAT_CURRENCY_SYMBOL[fiatCurrencyCode] }</span><span className='amount'>{ fiatAmount }</span>
                     </div>

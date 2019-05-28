@@ -1,10 +1,5 @@
 /* @flow */
 
-export const PAYMENT_STATUS = {
-    PENDING:  'pending',
-    RECEIVED: 'received'
-};
-
 export const FIAT_CURRENCY = {
     USD: 'usd',
     GBP: 'gbp',

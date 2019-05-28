@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 import { setupSession, awaitFunds } from '../api/transfer';
-import { CRYPTO_CURRENCY, FIAT_CURRENCY } from '../config/constants';
+import { CRYPTO_CURRENCY, FIAT_CURRENCY } from '../constants';
 import { hasConstant } from '../lib';
 
 const DEFAULT_CRYPTO_CURRENCY = CRYPTO_CURRENCY.NANO;

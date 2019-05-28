@@ -2,8 +2,8 @@
 
 import React, { type Element } from 'react';
 
-import { CRYPTO_CURRENCY, FIAT_CURRENCY, FIAT_CURRENCY_SYMBOL } from '../config/constants';
-import NanoLogo from '../img/nano_logo.svg';
+import { CRYPTO_CURRENCY, FIAT_CURRENCY, FIAT_CURRENCY_SYMBOL } from '../../constants';
+import NanoLogo from '../../img/nano_logo.svg';
 
 type TransactionDetailsProps = {|
     payeeName : string,
@@ -82,18 +82,42 @@ export function TransactionDetails({ payeeName, payeeLogo, cryptoAmount, cryptoC
                         font-size: 30px;
                     }
 
+                    .transaction-details .crypto-amount .currency-code {
+                        display: inline-block;
+                        vertical-align: middle;
+                        font-size: 16px;
+                        margin-left: 7px;
+                    }
+
                     .transaction-details .fiat-amount {
                         margin-top: 5px;
                         font-size: 12px;
                         color: #888;
+                    }
+
+                    .transaction-details .fiat-amount .symbol {
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+
+                    .transaction-details .fiat-amount .amount {
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+
+                    .transaction-details .fiat-amount .currency-code {
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-left: 3px;
                     }
                 `}
             </style>
 
             <div className='transaction-details'>
                 <div className='payee-logo'>
-                    { payeeLogo &&
-                    <img src={ payeeLogo } />
+                    {
+                        payeeLogo &&
+                            <img src={ payeeLogo } />
                     }
                 </div>
 
@@ -104,11 +128,14 @@ export function TransactionDetails({ payeeName, payeeLogo, cryptoAmount, cryptoC
                 <div className='crypto-amount'>
                     <span className='logo'><CryptoLogo /></span>
                     <span className='amount'>{ cryptoAmount }</span>
+                    <span className='currency-code'>{ cryptoCurrencyCode.toUpperCase() }</span>
                 </div>
 
                 { (fiatAmount && fiatCurrencyCode) && (
                     <div className='fiat-amount'>
-                        <span className='symbol'>{ FIAT_CURRENCY_SYMBOL[fiatCurrencyCode] }</span><span className='amount'>{ fiatAmount }</span>
+                        <span className='symbol'>{ FIAT_CURRENCY_SYMBOL[fiatCurrencyCode] }</span>
+                        <span className='amount'>{ fiatAmount }</span>
+                        <span className='currency-code'>{ fiatCurrencyCode.toUpperCase() }</span>
                     </div>
                 ) }
 

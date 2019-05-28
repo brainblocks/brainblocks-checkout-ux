@@ -2,8 +2,8 @@
 
 import React, { type Element } from 'react';
 
-import { CRYPTO_CURRENCY, FIAT_CURRENCY_SYMBOL, FIAT_CURRENCY } from '../config/constants';
-import ConfirmationIllustration from '../img/confirmation_illustration.svg';
+import { CRYPTO_CURRENCY, FIAT_CURRENCY_SYMBOL, FIAT_CURRENCY } from '../../constants';
+import ConfirmationIllustration from '../../img/confirmation_illustration.svg';
 
 type SuccessMessageProps = {|
     payeeName : string,
@@ -19,7 +19,7 @@ export function SuccessMessage({ payeeName, cryptoAmount, cryptoCurrencyCode, fi
             <style jsx>
                 {`
                     section.success-message {
-                        padding-top: 40px;
+                        padding: 40px;
                     }
 
                     h2.subheader {
@@ -41,12 +41,10 @@ export function SuccessMessage({ payeeName, cryptoAmount, cryptoCurrencyCode, fi
 
                     section.transaction-details {
                         background: white;
-                        border-radius: 5px;
-                        width: 70%;
-                        margin-left: 15%;
+                        border-radius: 10px;
                         margin-top: 20px;
-                        padding: 10px;
-                        font-size: 12px;
+                        padding: 30px;
+                        font-size: 16px;
                     }
 
                     p {
@@ -64,7 +62,9 @@ export function SuccessMessage({ payeeName, cryptoAmount, cryptoCurrencyCode, fi
                     }
 
                     section.transaction-details .amount {
-                        color: #666;
+                        color: #888;
+                        margin-top: 12px;
+                        font-weight: bold;
                     }
                 `}
             </style>
@@ -75,15 +75,15 @@ export function SuccessMessage({ payeeName, cryptoAmount, cryptoCurrencyCode, fi
             <h1 className="header">Completed</h1>
 
             <section className="transaction-details">
-                <p className="payee"><span className="payee-name">{ payeeName }</span> has received</p>
-                <p className="amount">
-                    { cryptoAmount } { cryptoCurrencyCode }
+                <section className="payee"><span className="payee-name">{ payeeName }</span> has received</section>
+                <section className="amount">
+                    { cryptoAmount } { cryptoCurrencyCode.toUpperCase() }
                     {
                         (fiatAmount && fiatCurrencyCode) &&
-                            `${ FIAT_CURRENCY_SYMBOL[fiatCurrencyCode] }${ fiatAmount }`
+                            ` (${ FIAT_CURRENCY_SYMBOL[fiatCurrencyCode] }${ fiatAmount })`
                     }
                     
-                </p>
+                </section>
             </section>
         </section>
     );

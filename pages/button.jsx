@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 
 import BrainBlocksLogo from '../img/brainblocks_logo.svg';
-import { Spinner } from '../components/spinner';
-import { Head } from '../components/head';
+import { Spinner } from '../components/ui/spinner';
+import { Head } from '../components/dom/head';
 
 const Button = () => {
     const [ loading, setLoading ] = useState(false);
@@ -87,8 +87,8 @@ const Button = () => {
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
-                    height: 25px;
-                    width: 25px;
+                    height: 50vh;
+                    width: 50vh;
                 }
 
                 @media only screen and (min-width: 100px) {

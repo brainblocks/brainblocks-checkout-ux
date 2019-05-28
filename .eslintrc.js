@@ -9,7 +9,8 @@ module.exports = {
         'promise/no-native': 'off',
         'no-restricted-globals': 'off',
         'compat/compat': 'off',
-        'react/require-default-props': 'off'
+        'react/require-default-props': 'off',
+        'react/forbid-component-props': 'off'
     },
 
     'globals': {

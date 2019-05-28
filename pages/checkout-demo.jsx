@@ -2,29 +2,16 @@
 
 import React, { useEffect } from 'react';
 
-import { Head } from '../components/head';
+import { Head } from '../components/dom/head';
 
 const transaction = {};
 
-if (Math.random() < 0.3) {
-    transaction.payeeName = 'Apple Store';
-    transaction.payeeLogo = 'https://i.imgur.com/JkArT9C.png';
-} else if (Math.random() < 0.7) {
-    transaction.payeeName = 'Amazon';
-    transaction.payeeLogo = 'https://i.imgur.com/AW14Qak.png';
-} else {
-    transaction.payeeName = 'eBay';
-}
+transaction.payeeName = 'Apple Store';
+transaction.payeeLogo = 'https://i.imgur.com/JkArT9C.png';
 
-if (Math.random() < 0.3) {
-    transaction.currency = 'usd';
-} else if (Math.random() < 0.3) {
-    transaction.currency = 'eur';
-} else {
-    transaction.currency = 'nano';
-}
+transaction.currency = 'usd';
+transaction.amount = '0.01';
 
-transaction.amount = `${ Math.floor(Math.random() * 100) }.${ Math.floor(Math.random() * 100) }`;
 transaction.destination = 'nano_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji';
 
 const Index = () => {

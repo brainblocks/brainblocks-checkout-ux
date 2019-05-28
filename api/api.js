@@ -2,12 +2,18 @@
 
 import { objToQuery } from '../lib/util';
 
-const STATUS = {
-    SUCCESS: 'success',
-    EXPIRED: 'expired'
+export const METHOD = {
+    GET:  'get',
+    POST: 'post'
 };
 
-export function callAPI<T>(method : string, url : string, data : ?Object) : Promise<T> {
+const STATUS = {
+    SUCCESS: 'success',
+    EXPIRED: 'expired',
+    ERROR:   'error'
+};
+
+export function callPaymentAPI<T>(method : string, url : string, data : ?Object) : Promise<T> {
     data = data || {};
 
     const req : RequestOptions = { // eslint-disable-line no-undef
@@ -32,4 +38,26 @@ export function callAPI<T>(method : string, url : string, data : ?Object) : Prom
                 return json;
             });
         });
+}
+
+type WalletResponse<T> = {|
+    status : number,
+    headers : { [string] : string },
+    data : T
+|};
+
+export function callWalletAPI<T>(method : string, url : string, data : ?Object) : Promise<WalletResponse<T>> {
+    return fetch(url, {
+        method,
+        headers: data ? { 'content-type': 'application/json' } : {},
+        body:    data ? JSON.stringify(data) : null
+    }).then(res => {
+        return res.json().then(json => {
+            return {
+                status:  res.status,
+                headers: res.headers,
+                data:    json
+            };
+        });
+    });
 }

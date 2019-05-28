@@ -3,16 +3,17 @@
 import React, { useState, useEffect } from 'react';
 
 import { usePaymentSession } from '../hooks';
-import { StatusBanner } from '../components/statusBanner';
-import { PAYMENT_STATUS } from '../config/constants';
-import { PaymentTypeSelector } from '../components/paymentTypeSelector';
-import { AccountLoginForm } from '../components/accountLoginForm';
-import { TransactionDetails } from '../components/transactionsDetails';
-import { QRCodeScan } from '../components/qrCodeScan';
-import { CopyAddress } from '../components/copyAddress';
-import { Head } from '../components/head';
+import { StatusBanner } from '../components/core/statusBanner';
+import { PAYMENT_STATUS } from '../constants';
+import { PayTypeSelector } from '../components/core/payTypeSelector';
+import { TransactionDetails } from '../components/core/transactionsDetails';
+import { PayWithQRCode } from '../components/core/payWithQRCode';
+import { PayWithCopyPaste } from '../components/core/payWithCopyPaste';
+import { Head } from '../components/dom/head';
 import { getLocalStorage, setLocalStorage, isBrowser } from '../lib/util';
-import { SuccessMessage } from '../components/successMessage';
+import { SuccessMessage } from '../components/core/successMessage';
+import { PayWithAccount } from '../components/core/payWithAccount';
+import { LOCAL_STORAGE_KEY } from '../constants/storage';
 
 const PAGE = {
     WALLET: 'wallet',
@@ -38,11 +39,11 @@ const PAGES = [
 
 const usePage = (defaultPage) => {
     const [ page, setPage ] = useState(() => {
-        return getLocalStorage('brainblocks_payment_selected_page') || defaultPage;
+        return getLocalStorage(LOCAL_STORAGE_KEY.SELECTED_PAGE) || defaultPage;
     });
 
     const setSelectedPage = (selectedPage) => {
-        setLocalStorage('brainblocks_payment_selected_page', selectedPage);
+        setLocalStorage(LOCAL_STORAGE_KEY.SELECTED_PAGE, selectedPage);
         setPage(selectedPage);
     };
 
@@ -127,6 +128,11 @@ const Checkout = () => {
                         background-color: #f7f7f7;
                         padding: 0 40px 30px;
                     }
+
+                    .page-section {
+                        width: 300px;
+                        margin: auto;
+                    }
                 `}
             </style>
 
@@ -160,28 +166,33 @@ const Checkout = () => {
                             </section>
 
                             <section className='middle-section'>
-                                <PaymentTypeSelector pages={ PAGES } selected={ selectedPage } onSelect={ setSelectedPage } />
+                                <PayTypeSelector pages={ PAGES } selected={ selectedPage } onSelect={ setSelectedPage } />
                             </section>
 
                             <section className='bottom-section'>
-                                {
-                                    (selectedPage === PAGE.WALLET) &&
-                                    <AccountLoginForm />
-                                }
-                                {
-                                    (selectedPage === PAGE.SCAN) &&
-                                    <QRCodeScan
-                                        cryptoCurrencyCode={ cryptoCurrencyCode }
-                                        cryptoAmount={ cryptoAmount }
-                                        cryptoDestination={ cryptoAccount } />
-                                }
-                                {
-                                    (selectedPage === PAGE.COPY) &&
-                                    <CopyAddress
-                                        cryptoCurrencyCode={ cryptoCurrencyCode }
-                                        cryptoAmount={ cryptoAmount }
-                                        cryptoDestination={ cryptoAccount } />
-                                }
+                                <section className='page-section'>
+                                    {
+                                        (selectedPage === PAGE.WALLET) &&
+                                            <PayWithAccount
+                                                cryptoCurrencyCode={ cryptoCurrencyCode }
+                                                cryptoAmount={ cryptoAmount }
+                                                cryptoDestination={ cryptoAccount } />
+                                    }
+                                    {
+                                        (selectedPage === PAGE.SCAN) &&
+                                            <PayWithQRCode
+                                                cryptoCurrencyCode={ cryptoCurrencyCode }
+                                                cryptoAmount={ cryptoAmount }
+                                                cryptoDestination={ cryptoAccount } />
+                                    }
+                                    {
+                                        (selectedPage === PAGE.COPY) &&
+                                            <PayWithCopyPaste
+                                                cryptoCurrencyCode={ cryptoCurrencyCode }
+                                                cryptoAmount={ cryptoAmount }
+                                                cryptoDestination={ cryptoAccount } />
+                                    }
+                                </section>
                             </section>
                         </>
                     )

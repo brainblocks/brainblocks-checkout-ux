@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, type Element } from 'react';
 
-import { PAYMENT_STATUS } from '../config/constants';
-import { noop } from '../lib';
+import { PAYMENT_STATUS } from '../../constants';
+import { noop } from '../../lib';
 
 const SETTINGS = {
     [ PAYMENT_STATUS.PENDING ]:  {
@@ -41,6 +41,10 @@ export function StatusBanner({ status, timeout = 10 * 60, onTimeout = noop } : S
                 onTimeout();
             }
         }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
     }, []);
 
     let statusMessage;

@@ -3,7 +3,7 @@
 import React, { type Element, type ChildrenArray } from 'react';
 import NextHead from 'next/head';
 
-import { BRAINBLOCKS_SCRIPT } from '../config';
+import { BRAINBLOCKS_SCRIPT } from '../../config';
 
 export function Head({ children } : { children? : ChildrenArray<*> }) : Element<*> {
     return (

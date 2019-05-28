@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "cross-env NODE_ENV=development PORT=3000 node server.js",
     "build": "next build",
-    "start": "next start",
+    "prod": "cross-env NODE_ENV=production PORT=3000 node server.js",
     "lint": "eslint --ext .js --ext .jsx .",
     "flow-typed": "rm -rf ./flow-typed && flow-typed install && flow-typed install jest@23",
     "flow": "flow",
@@ -29,13 +29,18 @@
   "license": "ISC",
   "dependencies": {
     "belter": "^1.0.82",
+    "big-integer": "^1.6.43",
     "brainblocks-components": "git+https://gitlab+deploy-token-1:inPbzBjEPLPpaBwhd_Pw@git.brainblocks.io/brainblocks/brainblocks-react-components.git#master",
     "clipboard": "^2.0.4",
     "copy-to-clipboard": "^3.0.8",
-    "next": "^7.0.2",
+    "destyle": "^0.3.1",
+    "next": "^8.1.0",
+    "pbkdf2": "^3.0.17",
     "qrcode.react": "^0.9.3",
+    "rai-wallet": "^0.4.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0-alpha.1",
+    "react-google-recaptcha": "^1.0.5",
     "zalgo-promise": "^1.0.36"
   },
   "devDependencies": {

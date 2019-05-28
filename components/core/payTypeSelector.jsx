@@ -2,7 +2,7 @@
 
 import React, { useState, type Element } from 'react';
 
-type PaymentTypeSelectorProps = {|
+type PayTypeSelectorProps = {|
     pages : $ReadOnlyArray<{|
         name : string,
         label : string
@@ -11,7 +11,7 @@ type PaymentTypeSelectorProps = {|
     onSelect : (string) => void
 |};
 
-export function PaymentTypeSelector({ pages, selected, onSelect } : PaymentTypeSelectorProps) : Element<*> {
+export function PayTypeSelector({ pages, selected, onSelect } : PayTypeSelectorProps) : Element<*> {
     const [ tab, setTab ] = useState(selected);
 
     const onClick = (tabType) => {
@@ -69,7 +69,7 @@ export function PaymentTypeSelector({ pages, selected, onSelect } : PaymentTypeS
                 {
                     pages.map(page =>
                         (
-                            <li>
+                            <li key={ page.name }>
                                 <button
                                     type="button"
                                     className={ `${ (tab === page.name) ? 'active' : 'inactive' }` }
@@ -83,5 +83,3 @@ export function PaymentTypeSelector({ pages, selected, onSelect } : PaymentTypeS
         </section>
     );
 }
-
-PaymentTypeSelector.displayName = 'Payment Type Selector';

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import { Head } from '../components/head';
+import { Head } from '../components/dom/head';
 import { isBrowser } from '../lib';
 
 const transaction = {};
@@ -69,9 +69,9 @@ const Index = () => {
                     text-align: center;
                 }
 
-                section p {
+                #button-container {
                     margin-top: 40px;
-                    width: 30%;
+                    width: 40%;
                     display: inline-block;
                 }
             `}
@@ -79,14 +79,14 @@ const Index = () => {
 
             <section>
                 <h2>BrainBlocks Payments Demo</h2>
-                <p>
+                <div id='button-container'>
                     { BrainBlocksButton &&
                         <BrainBlocksButton
                             env={ env }
                             transaction={ transaction }
                             onComplete={ onComplete } />
                     }
-                </p>
+                </div>
 
                 <br />
 

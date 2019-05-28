@@ -10,7 +10,7 @@ export function Spinner() : Element<*> {
                     .spinner {
                         height: 100%;
                         width: 100%;
-                        border: 3px solid rgba(0, 0, 0, .2);
+                        border: 2px solid rgba(0, 0, 0, .2);
                         border-top-color: rgba(255, 255, 255, 0.8);
                         border-radius: 100%;
                         animation: rotation .7s infinite linear;

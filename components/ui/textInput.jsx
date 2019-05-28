@@ -7,12 +7,12 @@ import { KEYCODE } from '../../constants/events';
 
 type TextInputProps = {|
     label? : string,
-    value? : string,
+    value? : string | void,
     placeholder? : string,
     type? : string,
     onChange? : (SyntheticInputEvent<EventTarget>) => void, // eslint-disable-line no-undef
     onValueChange? : (string) => void,
-    onClick? : (Event) => void,
+    onClick? : (Event) => void | boolean,
     onEnter? : (Event) => void,
     backgroundColor? : string,
     placeholderColor? : string,

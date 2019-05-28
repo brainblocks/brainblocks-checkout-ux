@@ -28,7 +28,18 @@ const AUTH_ERROR = {
     TWO_FACTOR_AUTH: '2FA_REQUIRED'
 };
 
-export function login({ username, password, recaptcha, token2fa = '' } : LoginOptions) : Promise<void> {
+type Auth = {|
+    token : string,
+    user : {|
+        username : string,
+        firstName : ?string,
+        vault : {|
+            wallet : string
+        |}
+    |}
+|};
+
+export function login({ username, password, recaptcha, token2fa = '' } : LoginOptions) : Promise<Auth> {
     return callWalletAPI(METHOD.POST, AUTH_API_URL, {
         username, password, recaptcha, token2fa
     }).then(({ status, data }) => {

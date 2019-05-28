@@ -19,7 +19,13 @@ export function SelectDropdown({ value, options, onChange } : SelectDropdownProp
     const [ selectedValue, setSelectedValue ] = useState(value);
     const [ expanded, setExpanded ] = useState(false);
 
-    const { label } = options.find(option => (option.value === selectedValue));
+    const selectedOption = options.find(option => (option.value === selectedValue));
+
+    if (!selectedOption) {
+        throw new Error(`Can not find option for value: ${ value }`);
+    }
+
+    const { label } = selectedOption;
 
     const toggleDropdown = () => {
         setExpanded(!expanded);

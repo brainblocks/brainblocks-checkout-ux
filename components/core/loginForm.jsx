@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, type Element } from 'react';
 
-import { hash, type WalletType, getLocalStorage, setLocalStorage } from '../../lib';
+import { hash, getLocalStorage, setLocalStorage } from '../../lib';
 import { login, TwoFactorAuthError, AuthError } from '../../api/auth';
 import { SubmitButton } from '../ui/submitButton';
 import { TextInput } from '../ui/textInput';
@@ -16,8 +16,8 @@ type LoginFormProps = {|
         username : string,
         password : string,
         name : string,
-        encryptedWallet : WalletType
-    }) => void
+        encryptedWallet : string
+    }) => (void | Promise<void>)
 |};
 
 export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
@@ -65,6 +65,10 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
 
     const [ twoFactorRequested, setTwoFactorRequested ] = useState(false);
 
+    const usernameValue = username.value;
+    const passwordValue = password.value;
+    const captchaValue = captcha.value;
+
     const handleLogin = () => {
         username.enableValidation();
         password.enableValidation();
@@ -78,11 +82,15 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
             return;
         }
 
-        return hash(password.value, username.value).then(hashedPassword => {
+        if (!usernameValue || !passwordValue || !captchaValue) {
+            throw new Error(`Values not found`);
+        }
+
+        return hash(passwordValue, usernameValue).then(hashedPassword => {
             return login({
-                username:  username.value,
+                username:  usernameValue,
                 password:  hashedPassword,
-                recaptcha: captcha.value,
+                recaptcha: captchaValue,
                 token2fa:  twoFactorCode.value
             });
 
@@ -93,8 +101,8 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
             const encryptedWallet = user.vault.wallet;
 
             return onLogin({
-                username: username.value,
-                password: password.value,
+                username: usernameValue,
+                password: passwordValue,
                 name,
                 token,
                 encryptedWallet
@@ -164,7 +172,7 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
                         <div className="form-container">
                             <section className="input-field">
                                 <TextInput
-                                    value={ username.value }
+                                    value={ usernameValue }
                                     onValueChange={ username.setValue }
                                     placeholder='username'
                                     valid={ username.valid }
@@ -195,7 +203,6 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
                                     valid={ captcha.valid }
                                     validationEnabled={ captcha.validationEnabled }
                                     validationMessage={ captcha.validationMessage }
-                                    onEnter={ submitForm }
                                 />
                             </section>
 

@@ -7,7 +7,23 @@ type GetChainsOptions = {|
     accounts : $ReadOnlyArray<string>
 |};
 
-export function getChains({ accounts } : GetChainsOptions) : Promise<void> {
+export type Accounts = {
+    [string] : {|
+        balance : string,
+        // eslint-disable-next-line flowtype/no-mutable-array
+        blocks : Array<{|
+            origin : string,
+            contents : string,
+            amount : string
+        |}>
+    |}
+};
+
+export type Chains = {|
+    accounts : Accounts
+|};
+
+export function getChains({ accounts } : GetChainsOptions) : Promise<Chains> {
     return callWalletAPI(METHOD.POST, CHAINS_API_URL, { accounts }).then(({ status, data }) => {
         if (status === 200) {
             return data;
@@ -18,7 +34,7 @@ export function getChains({ accounts } : GetChainsOptions) : Promise<void> {
 }
 
 type BroadcastBlockOptions  = {|
-    block : string
+    block : Object
 |};
 
 export function broadcastBlock({ block } : BroadcastBlockOptions) : Promise<void> {

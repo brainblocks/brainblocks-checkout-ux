@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 
-type FieldValue = {|
-    value : string,
-    setValue : (string) => void,
+type FieldValue<T> = {|
+    value : T | void,
+    setValue : (T) => void,
     validationEnabled : boolean,
     enableValidation : () => void,
     disableValidation : () => void,
@@ -17,10 +17,10 @@ type FieldValue = {|
 
 type FieldValueOptions<T> = {|
     def? : T,
-    validator : (FieldValue) => void
+    validator : (FieldValue<T>) => void
 |};
 
-export function useFieldValue<T>({ validator, def = '' } : FieldValueOptions<T>) : FieldValue {
+export function useFieldValue<T>({ validator, def } : FieldValueOptions<T>) : FieldValue<T> {
     const [ value, setValue ] = useState(def);
     
     const [ valid, _setValid ] = useState(true);

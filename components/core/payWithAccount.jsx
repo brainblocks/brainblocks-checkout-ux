@@ -32,6 +32,14 @@ export function PayWithAccount({ cryptoAmount, cryptoCurrencyCode, cryptoDestina
     };
 
     const handlePay = () => {
+        if (!wallet) {
+            throw new Error(`Can not pay without wallet`);
+        }
+
+        if (!selectedAccount) {
+            throw new Error(`Can not pay without selected account`);
+        }
+
         return wallet.send(selectedAccount, cryptoDestination, cryptoAmount);
     };
 

@@ -1,19 +1,21 @@
 /* @flow */
 
-import React, { useState, type Element, type React$ElementRef } from 'react';
+import React, { useState, type Element } from 'react';
 
 import { promiseTry } from '../../lib';
 
 import { Spinner } from './spinner';
 
 type ButtonRef = {|
-    submit : () => void
+    submit : () => (void | Promise<void>)
 |};
 
 type SubmitButtonProps = {|
     onSubmit : () => void | Promise<void>,
     text : string,
-    buttonRef? : React$ElementRef<ButtonRef>
+    buttonRef? : {
+        current : ?ButtonRef
+    }
 |};
 
 export function SubmitButton({ onSubmit, text, buttonRef } : SubmitButtonProps) : Element<*> {

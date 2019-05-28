@@ -13,10 +13,11 @@ import { LoginForm } from './loginForm';
 type PayWithAccountProps = {|
     cryptoAmount : string,
     cryptoCurrencyCode : $Values<typeof CRYPTO_CURRENCY>,
-    cryptoDestination : string
+    cryptoDestination : string,
+    onPayment : () => (void | Promise<void>)
 |};
 
-export function PayWithAccount({ cryptoAmount, cryptoCurrencyCode, cryptoDestination } : PayWithAccountProps) : null | Element<*> {
+export function PayWithAccount({ cryptoAmount, cryptoCurrencyCode, cryptoDestination, onPayment } : PayWithAccountProps) : null | Element<*> {
     if (!cryptoDestination) {
         return null;
     }
@@ -40,7 +41,19 @@ export function PayWithAccount({ cryptoAmount, cryptoCurrencyCode, cryptoDestina
             throw new Error(`Can not pay without selected account`);
         }
 
-        return wallet.send(selectedAccount, cryptoDestination, cryptoAmount);
+        return wallet.send(selectedAccount, cryptoDestination, cryptoAmount).then(() => {
+            return onPayment();
+        });
+    };
+
+    const getValidAccounts = () => {
+        if (!wallet) {
+            throw new Error(`Can not get accounts when wallet not populated`);
+        }
+
+        return wallet.accounts.filter(account => {
+            return (parseFloat(account.balance) >= parseFloat(cryptoAmount));
+        });
     };
 
     return (
@@ -67,22 +80,37 @@ export function PayWithAccount({ cryptoAmount, cryptoCurrencyCode, cryptoDestina
                                 header='Select a Wallet'
                             />
 
-                            <section className='account-select'>
-                                <SelectDropdown
-                                    value={ selectedAccount }
-                                    options={ wallet.accounts.map(
-                                        ({ label, account }) => ({ label, value: account })
-                                    ) }
-                                    onChange={ setSelectedAccount }
-                                />
-                            </section>
+                            {
+                                getValidAccounts().length
 
-                            <section className="pay-button">
-                                <SubmitButton
-                                    onSubmit={ handlePay }
-                                    text="Confirm and Pay"
-                                />
-                            </section>
+                                    ? (
+                                        <>
+                                            <section className='account-select'>
+                                                <SelectDropdown
+                                                    value={ selectedAccount }
+                                                    options={ getValidAccounts().map(
+                                                        ({ label, account, balance }) => ({
+                                                            label: `${ label } (${ balance } ${ cryptoCurrencyCode.toUpperCase() })`,
+                                                            value: account
+                                                        })
+                                                    ) }
+                                                    onChange={ setSelectedAccount }
+                                                />
+                                            </section>
+
+                                            <section className="pay-button">
+                                                <SubmitButton
+                                                    onSubmit={ handlePay }
+                                                    text="Confirm and Pay"
+                                                />
+                                            </section>
+                                        </>
+                                    )
+
+                                    : (
+                                        <p>No accounts with sufficient balance</p>
+                                    )
+                            }
                         </>
                     )
 

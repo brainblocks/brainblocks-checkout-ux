@@ -57,7 +57,7 @@ const Checkout = () => {
     }
 
     const paymentSession = usePaymentSession();
-    const { payeeName, payeeLogo, cryptoAmount, cryptoCurrencyCode, fiatAmount, fiatCurrencyCode, cryptoAccount, received } = paymentSession || {};
+    const { payeeName, payeeLogo, cryptoAmount, cryptoCurrencyCode, fiatAmount, fiatCurrencyCode, cryptoAccount, received, onReceived } = paymentSession || {};
 
     const [ selectedPage, setSelectedPage ] = usePage(PAGE.WALLET);
 
@@ -78,6 +78,10 @@ const Checkout = () => {
     if (!paymentSession) {
         return <Head />;
     }
+
+    const onPayment = () => {
+        return onReceived;
+    };
 
     return (
         <div>
@@ -176,7 +180,8 @@ const Checkout = () => {
                                             <PayWithAccount
                                                 cryptoCurrencyCode={ cryptoCurrencyCode }
                                                 cryptoAmount={ cryptoAmount }
-                                                cryptoDestination={ cryptoAccount } />
+                                                cryptoDestination={ cryptoAccount }
+                                                onPayment={ onPayment } />
                                     }
                                     {
                                         (selectedPage === PAGE.SCAN) &&

@@ -43,10 +43,9 @@ export function useFieldValue<T>({ validator, def } : FieldValueOptions<T>) : Fi
 
     useEffect(() => {
         if (validator) {
-            _setValid(true);
             validator(fieldValue);
         }
-    }, [ validator, fieldValue ]);
+    }, [ value ]);
 
     return fieldValue;
 }

@@ -91,14 +91,10 @@ export function TextInput({
                         padding: 10px 12px;
                         color: ${ textColor };
                         border-radius: 6px;
-                        -webkit-user-select: none;
-                        -khtml-user-select: none;
-                        -moz-user-select: none;
-                        -ms-user-select: none;
-                        user-select: none;
                         outline: none;
                         transition: background-color 0.1s;
-                        cursor: ${ pointer ? 'pointer' : 'default' }
+                        cursor: ${ pointer ? 'pointer' : 'auto' };
+                        -webkit-user-select: text;
                     }
 
                     input:focus {
@@ -132,6 +128,7 @@ export function TextInput({
                 onChange={ handleChange }
                 onKeyUp={ handleKeyUp }
                 spellCheck='false'
+                autoComplete='false'
             />
 
             {

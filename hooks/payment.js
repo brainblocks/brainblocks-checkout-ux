@@ -20,7 +20,8 @@ type PaymentSession = {|
     cryptoCurrencyCode : $Values<typeof CRYPTO_CURRENCY>,
     cryptoAmount : string,
     payeeName : string,
-    payeeLogo : string
+    payeeLogo : string,
+    onReceived : void | Promise<void>
 |};
 
 export function usePaymentSession({ time = DEFAULT_TIME } : { time? : number } = {}) : ?PaymentSession {
@@ -54,6 +55,7 @@ export function usePaymentSession({ time = DEFAULT_TIME } : { time? : number } =
     const [ cryptoAccount, setCryptoAccount ] = useState();
     const [ received, setReceived ] = useState(false);
     const [ failed, setFailed ] = useState(false);
+    const [ onReceived, setOnReceived ] = useState();
 
     useEffect(() => {
         let sessionAmount = amount;
@@ -61,7 +63,7 @@ export function usePaymentSession({ time = DEFAULT_TIME } : { time? : number } =
             sessionAmount = parseInt(parseFloat(amount) * 1000000, 10).toString();
         }
 
-        setupSession({ amount: sessionAmount, currency, destination }).then(({ token: sessionToken, account, amount_rai }) => {
+        setOnReceived(setupSession({ amount: sessionAmount, currency, destination }).then(({ token: sessionToken, account, amount_rai }) => {
             setToken(sessionToken);
             setCryptoAccount(account);
             setCryptoAmount((amount_rai / 1000000).toFixed(3));
@@ -69,14 +71,15 @@ export function usePaymentSession({ time = DEFAULT_TIME } : { time? : number } =
             return awaitFunds({ token: sessionToken, time }).then(() => {
                 setReceived(true);
             });
-        }).catch(() => {
+        }).catch(err => {
             setFailed(true);
-        });
+            throw err;
+        }));
     }, [ amount, currency, destination ]);
 
     if (!token || !cryptoAccount || !cryptoAmount) {
         return;
     }
 
-    return { token, received, failed, cryptoAccount, cryptoDestination, fiatCurrencyCode, fiatAmount, cryptoCurrencyCode, cryptoAmount, payeeName, payeeLogo };
+    return { token, received, failed, cryptoAccount, cryptoDestination, fiatCurrencyCode, fiatAmount, cryptoCurrencyCode, cryptoAmount, payeeName, payeeLogo, onReceived };
 }

@@ -24,33 +24,29 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
 
     const username = useFieldValue({
         def:       getLocalStorage(LOCAL_STORAGE_KEY.USERNAME),
-        validator: ({ value, setInvalid }) => {
-            if (!value) {
-                setInvalid('Please enter a username');
-            }
+        validator: ({ value, setValid, setInvalid }) => {
+            return value ? setValid() : setInvalid('Please enter a username');
         }
     });
 
     const password = useFieldValue({
-        validator: ({ value, setInvalid }) => {
-            if (!value) {
-                setInvalid('Please enter a password');
-            }
+        validator: ({ value, setValid, setInvalid }) => {
+            return value ? setValid() : setInvalid('Please enter a password');
         }
     });
 
     const captcha = useFieldValue({
-        validator: ({ value, setInvalid }) => {
-            if (!value) {
-                setInvalid('Please confirm the captcha');
-            }
+        validator: ({ value, setValid, setInvalid }) => {
+            return value ? setValid() : setInvalid('Please confirm the captcha');
         }
     });
 
     const twoFactorCode = useFieldValue({
-        validator: ({ value, setInvalid }) => {
+        validator: ({ value, setValid, setInvalid }) => {
             if (!value || !value.match(/^\d{6}$/)) {
                 setInvalid('Please enter a six-digit two factor code');
+            } else {
+                setValid();
             }
         }
     });
@@ -68,6 +64,7 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
     const usernameValue = username.value;
     const passwordValue = password.value;
     const captchaValue = captcha.value;
+    const twoFactorValue = twoFactorCode.value;
 
     const handleLogin = () => {
         username.enableValidation();
@@ -91,7 +88,7 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
                 username:  usernameValue,
                 password:  hashedPassword,
                 recaptcha: captchaValue,
-                token2fa:  twoFactorCode.value
+                token2fa:  twoFactorValue
             });
 
         }).then(({ token, user }) => {
@@ -110,15 +107,17 @@ export function LoginForm({ onLogin } : LoginFormProps) : Element<*> {
 
         }).catch(err => {
             if (err instanceof AuthError) {
-                username.setInvalid('Please enter a valid username');
                 password.setInvalid('Please enter a valid password');
 
-                if (twoFactorCode.value) {
+                if (twoFactorValue) {
                     twoFactorCode.setInvalid('Please enter a valid two factor code');
                 }
-
             } else if (err instanceof TwoFactorAuthError) {
                 setTwoFactorRequested(true);
+
+                if (twoFactorValue) {
+                    twoFactorCode.setInvalid('Please enter a valid two factor code');
+                }
             } else {
                 throw err;
             }

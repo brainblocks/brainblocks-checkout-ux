@@ -4,6 +4,7 @@ import React, { type Element } from 'react';
 import QRCode from 'qrcode.react';
 
 import { CRYPTO_CURRENCY } from '../../constants';
+import { nanoToRaw } from '../../lib';
 
 import { SectionHeader } from './sectionHeader';
 
@@ -17,6 +18,8 @@ export function PayWithQRCode({ cryptoAmount, cryptoCurrencyCode, cryptoDestinat
     if (!cryptoDestination) {
         return null;
     }
+
+    const address = `nano:${ cryptoDestination }?amount=${ nanoToRaw(cryptoAmount) }`;
 
     return (
         <div>
@@ -34,7 +37,7 @@ export function PayWithQRCode({ cryptoAmount, cryptoCurrencyCode, cryptoDestinat
                 header={ `Send ${ cryptoAmount } ${ cryptoCurrencyCode }` }
             />
 
-            <section className="qr-code"><QRCode value={ cryptoDestination } size={ 180 } /></section>
+            <section className="qr-code"><QRCode value={ address } size={ 180 } /></section>
         </div>
     );
 }
